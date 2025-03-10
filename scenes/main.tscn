@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bqqgyqafm7xwp"]
+[gd_scene load_steps=28 format=3 uid="uid://bqqgyqafm7xwp"]
 
 [ext_resource type="PackedScene" uid="uid://dl2ed4gkybggf" path="res://objects/player.tscn" id="2_onms2"]
 [ext_resource type="PackedScene" uid="uid://cnymdajj1vsqm" path="res://objects/platform.tscn" id="6_sdmev"]
@@ -14,8 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://cd7oyc56ehkx1" path="res://sprites/coin.png" id="13_jfda3"]
 [ext_resource type="Script" path="res://scripts/Panel.cs" id="14_3eddf"]
 [ext_resource type="FontFile" uid="uid://j1s8knqa1441" path="res://fonts/Summer Concert.otf" id="15_kb6nn"]
-[ext_resource type="Script" path="res://database/DatabaseConnector.cs" id="16_nab4b"]
 [ext_resource type="PackedScene" uid="uid://c5ni7o4gc28gv" path="res://objects/Smashing Crift-Uusam.glb" id="16_6pava"]
+[ext_resource type="Script" path="res://database/DatabaseConnector.cs" id="16_nab4b"]
 [ext_resource type="FontFile" uid="uid://d0cxd77jybrcn" path="res://fonts/lilita_one_regular.ttf" id="17_tk810"]
 [ext_resource type="PackedScene" uid="uid://x7f0a6ivyopd" path="res://objects/Copy of Smashing Crift-Uusam.glb" id="17_tuudw"]
 [ext_resource type="PackedScene" uid="uid://bgmnykaqqio22" path="res://objects/Frantic Kasi.glb" id="18_eb3ph"]
@@ -66,7 +66,7 @@ font_size = 90
 environment = SubResource("Environment_525fm")
 
 [node name="Player" parent="." instance=ExtResource("2_onms2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.0111408)
+transform = Transform3D(0.42401, 0.0149209, -0.905535, 0, 0.999864, 0.0164752, 0.905658, -0.00698563, 0.423952, 12.2063, 2.9647, 1.61821)
 airAcceleration = 15.0
 burstSpeed = 500.0
 
@@ -284,6 +284,7 @@ horizontal_alignment = 2
 
 [node name="Database" type="Node3D" parent="."]
 script = ExtResource("16_nab4b")
+
 [node name="platform4" parent="." instance=ExtResource("6_sdmev")]
 transform = Transform3D(0.357618, 0, -0.933869, 0, 1, 0, 0.933869, 0, 0.357618, -1.02739, 9.07443, -28.9828)
 
