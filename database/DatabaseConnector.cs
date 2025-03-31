@@ -52,12 +52,12 @@ public partial class DatabaseConnector : Node
 				GD.Print("Connected to MySQL database through GetLeaderboard!");
 				
 
-				using (MySqlCommand command = new MySqlCommand("SELECT user_id, time_taken, coins_collected FROM stats ORDER BY time_taken ASC", connection))
+				using (MySqlCommand command = new MySqlCommand("SELECT username, time_taken, coins_collected FROM stats ORDER BY time_taken ASC", connection))
 				using (var reader = command.ExecuteReader())
 				{
 					while (reader.Read())
 					{
-						string username = reader.IsDBNull(reader.GetOrdinal("user_id")) ? "Unknown" : reader.GetString("user_id");
+						string username = reader.IsDBNull(reader.GetOrdinal("username")) ? "Unknown" : reader.GetString("username");
 						string timeTaken = reader.GetString("time_taken");
 						int coinsCollected = reader.GetInt32("coins_collected");
 						leaderboard.Add((username, timeTaken, coinsCollected));
