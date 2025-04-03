@@ -1,45 +1,33 @@
 using Godot;
 using System;
 
-public partial class Enemy1 : Node
+public partial class Enemy1 : AnimatedSprite3D
 {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		/*Add the enemy asset here
-		-
-		-
-		-
-		-
-		Create enemy attacks and hit points
-		-
-		-
-		-
-		-
-		-
-		-
-		*/
+		public delegate void OnTimeoutEventHandler();
+		_model = GetNode<Node3D>("Enemy1");
+		_animation = GetNode<AnimationPlayer>("Enemy1/AnimationPlayer");
+		if (Player != isOnFloor){
+			_animation.Play("idle", 0.1f);
+		}
+		else if (Player == isOnFloor){
+			_animation.Play("attack", 0.1f);
+			_sound.Play("laser_beams", 0.1f);
+		}
+		else {
+			_animation.Play("Backflip", 0.05f);
+		}
+		public void OnTimeout()
+	{
+		GD.Print("cd");
+	}
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	/* Called every frame. 'delta' is the elapsed time since the previous frame (Idk how to do this part, I just did the top part bc I'm familiar with it).*/
 	public override void _Process(double delta)
 	{
-		/*Idle animation here
-		-
-		-
-		-
-		-
-		-
-		-
-		-
-		Attack animation here
-		-
-		-
-		-
-		-
-		-
-		-
-		-
-		Death animation here*/
+		
 	}
 }
