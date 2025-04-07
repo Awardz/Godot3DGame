@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://c0h6i87frqe07"
-path="res://.godot/imported/Enemy_QuadShell.fbx-d618f320c4f54d24ff209543b0c07d2f.scn"
+uid="uid://dbvgfn5mwbket"
+path="res://.godot/imported/Enemy_EyeDrone.fbx-9bf79feabbb7d46b9fac305315893199.scn"
 
 [deps]
 
-source_file="res://Enemy_QuadShell.fbx"
-dest_files=["res://.godot/imported/Enemy_QuadShell.fbx-d618f320c4f54d24ff209543b0c07d2f.scn"]
+source_file="res://Enemy_EyeDrone.fbx"
+dest_files=["res://.godot/imported/Enemy_EyeDrone.fbx-9bf79feabbb7d46b9fac305315893199.scn"]
 
 [params]
 

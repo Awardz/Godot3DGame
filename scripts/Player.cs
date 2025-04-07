@@ -27,6 +27,8 @@ public partial class Player: CharacterBody3D
 	float rotationSpeed = 10f;
 	[Export]
 	float burstSpeed = 10f;
+	[Export]
+	float bulletSize = 0.5f;
 
 	public int coins = 0;
 	public int numJumps = 0;
@@ -47,6 +49,7 @@ public partial class Player: CharacterBody3D
 	private float yVelocity;
 	private float rotationDirection;
 	private bool gunActive;
+	private bool doubleJump = true;
 	private Vector3 lastDirection = Vector3.Forward;
 	
 
@@ -146,6 +149,7 @@ public partial class Player: CharacterBody3D
 		HandleControls(delta);
 		HandleEffects(delta);
 
+
 		// Respawn after falling off map
 		if (Position.Y < -10)
 		{
@@ -193,13 +197,11 @@ public partial class Player: CharacterBody3D
 		}
 		Vector3 bSpeed = Vector3.Zero;
 		// Handle player weapon
-		if (Input.IsActionJustPressed("shoot_burst")) 
+		if (Input.IsActionJustPressed("burst")) 
 		{
 			var bullet = _bulletScene.Instantiate<RigidBody3D>();
+			//bullet.Transform = bullet.Scaled(Vector3.One * bulletSize);
 			GetTree().Root.AddChild(bullet);
-
-			// Get rotation of player and use it to set the burst speed of the player
-			bSpeed = -_player.GlobalTransform.Basis.Z * burstSpeed; // Move backward relative to player direction
 
 			// Set position of bullet
 			bullet.Transform = _bulletSpawnPoint.GlobalTransform;
@@ -207,10 +209,9 @@ public partial class Player: CharacterBody3D
 			bullet.ApplyImpulse(_bulletSpawnPoint.GlobalTransform.Basis.Z * shootPower);
 
 
-			if (Input.MouseMode != Input.MouseModeEnum.Captured)
-			{
-				Input.MouseMode = Input.MouseModeEnum.Captured;
-			}
+			// Get rotation of player and use it to set the burst speed of the player
+			//bSpeed = -_player.GlobalTransform.Basis.Z * burstSpeed; // Move backward relative to player direction
+			bSpeed = BurstMovement();
 
 
 			// 5 second dynamic yield
@@ -219,22 +220,49 @@ public partial class Player: CharacterBody3D
 
 			
 		}
+		// Shoot without the pushback
+		if (Input.IsActionJustPressed("shoot"))
+		{
+			var bullet = _bulletScene.Instantiate<RigidBody3D>();
+			GetTree().Root.AddChild(bullet);
+
+			// Set position of bullet
+			bullet.Transform = _bulletSpawnPoint.GlobalTransform;
+			// Apply impulse
+			bullet.ApplyImpulse(_bulletSpawnPoint.GlobalTransform.Basis.Z * shootPower);
+
+			await ToSignal(GetTree().CreateTimer(5), "timeout");
+			bullet.QueueFree(); // Destroy bullet
+
+		}
+
+		if (Input.IsActionJustPressed("dash"))
+		{
+			bSpeed = -BurstMovement();
+			
+		}
 
 		// Handles player movement jumping and acceleration
 		if (IsOnFloor())
 		{
 			yVelocity = -0.01f;
+			doubleJump = true;
 		}
 		else
 		{
 			yVelocity = Mathf.Clamp(yVelocity - gravity, -maxTerminalVelocity, maxTerminalVelocity);
 		}
 
-		if (Input.IsActionJustPressed("jump") && IsOnFloor())
+		if (Input.IsActionJustPressed("jump") && (IsOnFloor() || doubleJump))
 		{
 			numJumps++;
 			_soundJump.Play();
 			yVelocity = jumpPower;
+
+			if (!IsOnFloor())
+			{
+				doubleJump = false;
+			}
 		}
 
 		float accel = IsOnFloor() ? acceleration : airAcceleration; // applies acceleration on ground, air acceleration in air
@@ -290,6 +318,18 @@ public partial class Player: CharacterBody3D
 			_animation.Play("jump", 0.1f);
 		}
 		
+	}
+
+	private Vector3 BurstMovement()
+	{
+		Vector3 bSpeed = Vector3.Zero;
+		// Move player backwards
+		while  (bSpeed.Length() < maxTerminalVelocity)
+		{
+			bSpeed = -_player.GlobalTransform.Basis.Z * burstSpeed;
+		}
+
+		return bSpeed;
 	}
 
 	private void StartGunCooldown()
