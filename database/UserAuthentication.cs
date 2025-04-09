@@ -78,7 +78,4 @@ public partial class UserAuthentication : Node
         }
     }
 
-
-
-
 }

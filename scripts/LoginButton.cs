@@ -24,8 +24,14 @@ public partial class LoginButton : Button
             passwordInput.Text
         );
 
-
-        GetTree().ChangeSceneToPacked(mainMenu);
+        if (success)
+        {
+            GetTree().ChangeSceneToPacked(mainMenu);
+        }
+        else
+        {
+            GD.Print("Login failed!");
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvh1d5yxg1y60"]
+[gd_scene load_steps=2 format=3 uid="uid://cpvfbfctawdp"]
 
 [ext_resource type="Script" path="res://scripts/RegisterButton.cs" id="1_dlvwc"]
 
@@ -16,6 +16,7 @@ offset_right = 193.0
 offset_bottom = 116.0
 
 [node name="PasswordInput" type="LineEdit" parent="."]
+layout_mode = 0
 offset_left = 32.0
 offset_top = 139.0
 offset_right = 207.0

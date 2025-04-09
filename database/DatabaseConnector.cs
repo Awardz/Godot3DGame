@@ -6,9 +6,9 @@ using MySqlConnector;
 public partial class DatabaseConnector : Node
 {
 	private string connection = "Server=localhost;Database=godot3dgame;User ID=root;Password=password;";
-	public void ConnectToDatabase(string timeTaken, int coins)
+	public void ConnectToDatabase(int levelId, string timeTaken, int coins)
 	{
-		string query = "INSERT INTO stats (time_taken, coins_collected) VALUES (@time_taken, @coins_collected);";
+		string query = "INSERT INTO stats (level_id, time_taken, coins_collected) VALUES (@level_id, @time_taken, @coins_collected);";
 
 		using (var connection = new MySqlConnection(this.connection))
 		{
@@ -19,6 +19,7 @@ public partial class DatabaseConnector : Node
 
 				using (MySqlCommand command = new MySqlCommand(query, connection))
 				{
+					command.Parameters.AddWithValue("@level_id", levelId);
 					command.Parameters.AddWithValue("@time_taken", timeTaken);
 					command.Parameters.AddWithValue("@coins_collected", coins);
 
@@ -35,11 +36,6 @@ public partial class DatabaseConnector : Node
 		}
 	}
 
-	internal void ConnectToDatabase(string v)
-	{
-		throw new NotImplementedException();
-	}
-
 	public List<(string username, string timeTaken, int coins)> GetLeaderboard()
 	{
 		var leaderboard = new List<(string, string, int)>();
@@ -49,10 +45,30 @@ public partial class DatabaseConnector : Node
 			try
 			{
 				connection.Open();
-				GD.Print("Connected to MySQL database through GetLeaderboard!");
+				GD.Print("Fetching Leaderboard...");
 				
+				String query = @"
+					SELECT 
+						IF(s.user_id = 0, 'Anon',
+						IFNULL(u.username, 'Unknown')) AS display_name,
+						s.time_taken, s.coins_collected
+					FROM stats s
+					LEFT JOIN users u ON s.user_id = u.user_id
+					ORDER BY s.time_taken ASC;";
 
-				using (MySqlCommand command = new MySqlCommand("SELECT username, time_taken, coins_collected FROM stats ORDER BY time_taken ASC", connection))
+					using (MySqlCommand command = new MySqlCommand(query, connection))
+					using (var reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							string username = reader.GetString("display_name");
+							//string username = reader.GetString("username");
+							string timeTaken = reader.GetString("time_taken");
+							int coinsCollected = reader.GetInt32("coins_collected");
+							leaderboard.Add((username, timeTaken, coinsCollected));
+						}
+					}
+				/* using (MySqlCommand command = new MySqlCommand("SELECT username, time_taken, coins_collected FROM stats ORDER BY time_taken ASC", connection))
 				using (var reader = command.ExecuteReader())
 				{
 					while (reader.Read())
@@ -62,7 +78,7 @@ public partial class DatabaseConnector : Node
 						int coinsCollected = reader.GetInt32("coins_collected");
 						leaderboard.Add((username, timeTaken, coinsCollected));
 					}
-				}
+				} */
 			}
 			catch	(MySqlException ex)
 			{
