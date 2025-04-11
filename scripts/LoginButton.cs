@@ -10,7 +10,6 @@ public partial class LoginButton : Button
         var parent = GetParent<Control>();
         usernameInput = parent.GetNode<LineEdit>("UsernameInput");
         passwordInput = parent.GetNode<LineEdit>("PasswordInput");
-
         Pressed += OnLoginPressed;
     }
 
@@ -18,14 +17,15 @@ public partial class LoginButton : Button
     {
         // Get the AUTOLOADED instance
         var auth = GetNode<UserAuthentication>("/root/UserAuthentication");
-        
-        bool success = auth.Login(
-            usernameInput.Text.TrimEnd(),
-            passwordInput.Text
-        );
+        var userState = GetNode<UserState>("/root/UserState");
+
+        var (success, userId) = auth.Login(usernameInput.Text.TrimEnd(), passwordInput.Text);
+        ;
 
         if (success)
         {
+            userState.Login(userId, usernameInput.Text.TrimEnd());
+            GD.Print("Login successful! User ID: " + userId);
             GetTree().ChangeSceneToPacked(mainMenu);
         }
         else

@@ -24,6 +24,7 @@ Audio="*res://scripts/audio.gd"
 UserAuthentication="*res://database/UserAuthentication.cs"
 DatabaseConnector="*res://database/DatabaseConnector.cs"
 LevelRegistry="*res://database/LevelRegistry.cs"
+UserState="*res://database/UserState.cs"
 
 [display]
 

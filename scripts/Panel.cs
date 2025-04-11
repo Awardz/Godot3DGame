@@ -54,7 +54,9 @@ public partial class Panel : Node
 		{
 			Stop();
 			GD.Print("Congradulations! You collected all the coins in: " + GetTime());
-			_databaseConnector.ConnectToDatabase(_levelId, GetTime(), coins);
+			UserState userState = GetNode<UserState>("/root/UserState");
+			int userId = userState.UserId;
+			_databaseConnector.ConnectToDatabase(userId, _levelId, GetTime(), coins);
 		}
 	}
 }

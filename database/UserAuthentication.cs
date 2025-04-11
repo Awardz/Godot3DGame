@@ -40,9 +40,9 @@ public partial class UserAuthentication : Node
       
     }
 
-    public bool Login(string username, string password)
+    public (bool success, int userId) Login(string username, string password)
     {
-        string query = "SELECT password FROM users WHERE username = @username;";
+        string query = "SELECT user_id, password FROM users WHERE username = @username;";
 
         using (var connection = new MySqlConnection(this.connection))
         {
@@ -50,6 +50,7 @@ public partial class UserAuthentication : Node
             {
                 connection.Open();
                 GD.Print("Connected to MySQL database!");
+                
 
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -59,21 +60,32 @@ public partial class UserAuthentication : Node
                     {
                         if (reader.Read())
                         {
-                            GD.Print("User found!");
+                            GD.Print("User found!");    
                             string hash = reader.GetString("password");
-                            bool isValid = BCrypt.Net.BCrypt.Verify(password, hash);
-                            GD.Print("Password verification: " + isValid);
-                            return isValid;
+                            if (BCrypt.Net.BCrypt.Verify(password, hash))
+                            {
+                                int userId = reader.GetInt32("user_id");
+                                GD.Print("User ID: " + userId);
+                                
+                         
+                                GD.Print("User logged in!");
+                                return (true, userId);
+                            }
+                            else
+                            {
+                                GD.Print("Invalid password.");
+                                return (false, 0);
+                            }
                         }
                     }
                 }
 
-                return false;
+                return (false, 0);
             }
             catch (MySqlException ex)
             {
                 GD.PrintErr("Error connecting to MySQL: " + ex.Message);
-                return false;
+                return (false, 0);
             }
         }
     }

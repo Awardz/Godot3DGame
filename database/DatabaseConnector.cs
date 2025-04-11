@@ -6,9 +6,11 @@ using MySqlConnector;
 public partial class DatabaseConnector : Node
 {
 	private string connection = "Server=localhost;Database=godot3dgame;User ID=root;Password=password;";
-	public void ConnectToDatabase(int levelId, string timeTaken, int coins)
+	public void ConnectToDatabase(int userId, int levelId, string timeTaken, int coins)
 	{
-		string query = "INSERT INTO stats (level_id, time_taken, coins_collected) VALUES (@level_id, @time_taken, @coins_collected);";
+		string query = @"
+			INSERT INTO stats (user_id, level_id, time_taken, coins_collected)
+			VALUES (@user_id, @level_id, @time_taken, @coins_collected);";
 
 		using (var connection = new MySqlConnection(this.connection))
 		{
@@ -19,6 +21,7 @@ public partial class DatabaseConnector : Node
 
 				using (MySqlCommand command = new MySqlCommand(query, connection))
 				{
+					command.Parameters.AddWithValue("@user_id", userId);
 					command.Parameters.AddWithValue("@level_id", levelId);
 					command.Parameters.AddWithValue("@time_taken", timeTaken);
 					command.Parameters.AddWithValue("@coins_collected", coins);
@@ -26,12 +29,21 @@ public partial class DatabaseConnector : Node
 
 					int rowsAffected = command.ExecuteNonQuery();
 					GD.Print("Time inserted into database! Rows affected: " + rowsAffected);
+					if (rowsAffected > 0)
+					{
+						GD.Print("Data inserted successfully.");
+					}
+					else
+					{
+						GD.PrintErr("No rows were affected. Data may not have been inserted.");
+					}
 				}
 
 			}
 			catch	(MySqlException ex)
 			{
 				GD.PrintErr("Error connecting to MySQL: " + ex.Message);
+
 			}
 		}
 	}
