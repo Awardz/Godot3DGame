@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Godot;
 using MySqlConnector;
 
@@ -74,23 +75,11 @@ public partial class DatabaseConnector : Node
 						while (reader.Read())
 						{
 							string username = reader.GetString("display_name");
-							//string username = reader.GetString("username");
 							string timeTaken = reader.GetString("time_taken");
 							int coinsCollected = reader.GetInt32("coins_collected");
 							leaderboard.Add((username, timeTaken, coinsCollected));
 						}
 					}
-				/* using (MySqlCommand command = new MySqlCommand("SELECT username, time_taken, coins_collected FROM stats ORDER BY time_taken ASC", connection))
-				using (var reader = command.ExecuteReader())
-				{
-					while (reader.Read())
-					{
-						string username = reader.IsDBNull(reader.GetOrdinal("username")) ? "Unknown" : reader.GetString("username");
-						string timeTaken = reader.GetString("time_taken");
-						int coinsCollected = reader.GetInt32("coins_collected");
-						leaderboard.Add((username, timeTaken, coinsCollected));
-					}
-				} */
 			}
 			catch	(MySqlException ex)
 			{
@@ -101,4 +90,73 @@ public partial class DatabaseConnector : Node
 		return leaderboard;
 		}
 
+		public List<(int statId, string username, string timeTaken, int coins)> GetAdminLeaderboard()
+		{
+			var leaderboard = new List<(int, string, string, int)>();
+
+			using (var connection = new MySqlConnection(this.connection))
+			{
+				try
+				{
+					connection.Open();
+					GD.Print("Fetching Leaderboard Entries...");
+
+					string query = @"
+						SELECT 
+							s.stats_id,
+							IF(s.user_id = 0, 'Anon',
+							IFNULL(u.username, 'Unknown')) AS display_name,
+							s.time_taken, s.coins_collected
+						FROM stats s
+						LEFT JOIN users u ON s.user_id = u.user_id
+						ORDER BY s.time_taken ASC;";
+
+					using (MySqlCommand command = new MySqlCommand(query, connection))
+					using (var reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							int statId = reader.GetInt32("stats_id");
+							string username = reader.GetString("display_name");
+							string timeTaken = reader.GetString("time_taken");
+							int coinsCollected = reader.GetInt32("coins_collected");
+							leaderboard.Add((statId, username, timeTaken, coinsCollected));
+						}
+					}
+				}
+				catch (MySqlException ex)
+				{
+					GD.PrintErr("Error fetching leaderboard entries: " + ex.Message);
+				}
+			}
+
+			return leaderboard;
+		}
+
+		public bool DeleteLeaderboardEntry(int statId)
+		{
+			const string query = "DELETE FROM stats WHERE stats_id = @id;";
+
+			using (var connection = new MySqlConnection(this.connection))
+			{
+				try
+				{
+					connection.Open();
+					GD.Print("Connected to MySQL database!");
+
+					using (MySqlCommand command = new MySqlCommand(query, connection))
+					{
+						command.Parameters.AddWithValue("@id", statId);
+						int rowsAffected = command.ExecuteNonQuery();
+						GD.Print("Entry deleted from database! Rows affected: " + rowsAffected);
+						return rowsAffected > 0;
+					}
+				}
+				catch (MySqlException ex)
+				{
+					GD.PrintErr("Error deleting entry: " + ex.Message);
+					return false;
+				}
+			}
+		}
 	}

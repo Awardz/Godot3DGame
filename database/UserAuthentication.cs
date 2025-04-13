@@ -12,7 +12,7 @@ public partial class UserAuthentication : Node
     {
         
         string hash  = BCrypt.Net.BCrypt.HashPassword(password);
-        string query = "INSERT INTO users (username, password) VALUES (@username, @password);";
+        string query = "INSERT INTO users (username, password, is_admin) VALUES (@username, @password FALSE);";
 
         using (var connection = new MySqlConnection(this.connection))
         {
@@ -40,9 +40,9 @@ public partial class UserAuthentication : Node
       
     }
 
-    public (bool success, int userId) Login(string username, string password)
+    public (bool success, int userId, bool isAdmin) Login(string username, string password)
     {
-        string query = "SELECT user_id, password FROM users WHERE username = @username;";
+        string query = "SELECT user_id, password, is_admin FROM users WHERE username = @username;";
 
         using (var connection = new MySqlConnection(this.connection))
         {
@@ -66,26 +66,28 @@ public partial class UserAuthentication : Node
                             {
                                 int userId = reader.GetInt32("user_id");
                                 GD.Print("User ID: " + userId);
+                                bool isAdmin = reader.GetBoolean("is_admin");
+                                GD.Print("Is Admin: " + isAdmin);
                                 
                          
                                 GD.Print("User logged in!");
-                                return (true, userId);
+                                return (true, userId, isAdmin);
                             }
                             else
                             {
                                 GD.Print("Invalid password.");
-                                return (false, 0);
+                                return (false, 0, false);
                             }
                         }
                     }
                 }
 
-                return (false, 0);
+                return (false, 0, false); // User not found
             }
             catch (MySqlException ex)
             {
                 GD.PrintErr("Error connecting to MySQL: " + ex.Message);
-                return (false, 0);
+                return (false, 0, false); // Error occurred
             }
         }
     }

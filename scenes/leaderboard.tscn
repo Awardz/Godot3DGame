@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://d2papmwbyawc2"]
+[gd_scene load_steps=5 format=3 uid="uid://d2papmwbyawc2"]
 
 [ext_resource type="Script" path="res://database/LeaderboardUI.cs" id="1_hsent"]
 [ext_resource type="Script" path="res://scripts/ReturnButton.cs" id="2_86bjc"]
+[ext_resource type="PackedScene" uid="uid://dgnhh041nhqfn" path="res://scenes/AdminButton.tscn" id="2_eyhfb"]
+[ext_resource type="PackedScene" uid="uid://5poma8lmp52v" path="res://scenes/DeleteConfirmDialog.tscn" id="3_kfppt"]
 
 [node name="LeaderboardUI" type="Control"]
 layout_mode = 3
@@ -10,14 +12,20 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -400.0
-offset_right = 329.0
+offset_right = 643.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hsent")
+_adminButtonScene = ExtResource("2_eyhfb")
+
+[node name="ConfirmationDialog" parent="." instance=ExtResource("3_kfppt")]
+visible = false
+ok_button_text = "Delete"
+dialog_text = "Delete This Record?"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_right = 729.0
+offset_right = 1043.0
 offset_bottom = 720.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

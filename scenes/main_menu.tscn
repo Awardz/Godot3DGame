@@ -178,18 +178,18 @@ text = "Quit"
 
 [node name="Button4" type="Button" parent="UI"]
 layout_mode = 0
-offset_left = 45.0
-offset_top = 272.0
-offset_right = 209.0
-offset_bottom = 354.0
+offset_left = 390.0
+offset_top = 655.0
+offset_right = 640.0
+offset_bottom = 705.0
 text = "Register"
 
 [node name="Button5" type="Button" parent="UI"]
 layout_mode = 0
-offset_left = 967.0
-offset_top = 283.0
-offset_right = 1187.0
-offset_bottom = 379.0
+offset_left = 640.0
+offset_top = 655.0
+offset_right = 890.0
+offset_bottom = 705.0
 text = "Login"
 
 [connection signal="pressed" from="UI/Button" to="." method="_on_button_pressed"]

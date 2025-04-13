@@ -13,18 +13,17 @@ public partial class LoginButton : Button
         Pressed += OnLoginPressed;
     }
 
-        private void OnLoginPressed()
+    private void OnLoginPressed()
     {
         // Get the AUTOLOADED instance
         var auth = GetNode<UserAuthentication>("/root/UserAuthentication");
         var userState = GetNode<UserState>("/root/UserState");
 
-        var (success, userId) = auth.Login(usernameInput.Text.TrimEnd(), passwordInput.Text);
-        ;
+        var (success, userId, isAdmin) = auth.Login(usernameInput.Text.TrimEnd(), passwordInput.Text);
 
         if (success)
         {
-            userState.Login(userId, usernameInput.Text.TrimEnd());
+            userState.Login(userId, usernameInput.Text.TrimEnd(), isAdmin);
             GD.Print("Login successful! User ID: " + userId);
             GetTree().ChangeSceneToPacked(mainMenu);
         }
