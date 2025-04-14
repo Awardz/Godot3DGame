@@ -7,6 +7,7 @@ public partial class Panel : Node
 	private int minutes = 0;
 	private int seconds = 0;
 	private int msec = 0;
+	private int _coins = 0;
 
 	private DatabaseConnector _databaseConnector;
 
@@ -18,6 +19,8 @@ public partial class Panel : Node
 		_minutes = GetNode<Label>("Minutes");
 		_seconds = GetNode<Label>("Seconds");
 		_msec = GetNode<Label>("Msec");
+
+	
 
 		_databaseConnector = GetNode<DatabaseConnector>("/root/DatabaseConnector");
 	}
@@ -47,11 +50,19 @@ public partial class Panel : Node
 
 	public void OnCoinCollected(int coins)
 	{
+		_coins = coins;
 		if (coins >= 10)
 		{
 			Stop();
 			GD.Print("Congradulations! You collected all the coins in: " + GetTime());
 			_databaseConnector.ConnectToDatabase(GetTime(), coins);
 		}
+	}
+
+	private void OnFlag2Collected()
+	{
+		Stop();
+		GD.Print("Congradulations! You completed the level in: " + GetTime());
+		_databaseConnector.ConnectToDatabase(GetTime(), _coins);
 	}
 }

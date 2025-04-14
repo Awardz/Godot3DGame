@@ -197,30 +197,6 @@ public partial class Player: CharacterBody3D
 		}
 		Vector3 bSpeed = Vector3.Zero;
 		// Handle player weapon
-		if (Input.IsActionJustPressed("burst")) 
-		{
-			var bullet = _bulletScene.Instantiate<RigidBody3D>();
-			//bullet.Transform = bullet.Scaled(Vector3.One * bulletSize);
-			GetTree().Root.AddChild(bullet);
-
-			// Set position of bullet
-			bullet.Transform = _bulletSpawnPoint.GlobalTransform;
-			// Apply impulse
-			bullet.ApplyImpulse(_bulletSpawnPoint.GlobalTransform.Basis.Z * shootPower);
-
-
-			// Get rotation of player and use it to set the burst speed of the player
-			//bSpeed = -_player.GlobalTransform.Basis.Z * burstSpeed; // Move backward relative to player direction
-			bSpeed = BurstMovement();
-
-
-			// 5 second dynamic yield
-		   /* await ToSignal(GetTree().CreateTimer(5), "timeout");
-			bullet.QueueFree(); // Destroy bullet */
-
-			
-		}
-		// Shoot without the pushback
 		if (Input.IsActionJustPressed("shoot"))
 		{
 			var bullet = _bulletScene.Instantiate<RigidBody3D>();
@@ -238,7 +214,7 @@ public partial class Player: CharacterBody3D
 
 		if (Input.IsActionJustPressed("dash"))
 		{
-			bSpeed = -BurstMovement();
+			bSpeed = BurstMovement();
 			
 		}
 
@@ -326,7 +302,7 @@ public partial class Player: CharacterBody3D
 		// Move player backwards
 		while  (bSpeed.Length() < maxTerminalVelocity)
 		{
-			bSpeed = -_player.GlobalTransform.Basis.Z * burstSpeed;
+			bSpeed = _player.GlobalTransform.Basis.Z * burstSpeed;
 		}
 
 		return bSpeed;

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bj3xsp2pt8bgu"]
+
+[ext_resource type="PackedScene" uid="uid://b7ter4nkh3iti" path="res://objects/Epic Esboo.glb" id="1_xhgre"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nsred"]
+size = Vector3(36.6081, 72.7232, 4.18647)
+
+[node name="ReflectiveGlass" instance=ExtResource("1_xhgre")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+
+[node name="Area3D" type="Area3D" parent="." index="1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0834808, 39.1792, -8.44917)
+shape = SubResource("BoxShape3D_nsred")
