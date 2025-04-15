@@ -11,7 +11,7 @@ clearcoat_enabled = true
 [sub_resource type="SphereShape3D" id="SphereShape3D_8je21"]
 radius = 0.263428
 
-[node name="Bullet" type="RigidBody3D"]
+[node name="Bullet" type="RigidBody3D" groups=["Bullet"]]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

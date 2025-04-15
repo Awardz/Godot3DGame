@@ -51,18 +51,11 @@ public partial class Panel : Node
 	public void OnCoinCollected(int coins)
 	{
 		_coins = coins;
-		if (coins >= 10)
-		{
-			Stop();
-			GD.Print("Congradulations! You collected all the coins in: " + GetTime());
-			_databaseConnector.ConnectToDatabase(GetTime(), coins);
-		}
 	}
 
 	private void OnFlag2Collected()
 	{
 		Stop();
-		GD.Print("Congradulations! You completed the level in: " + GetTime());
 		_databaseConnector.ConnectToDatabase(GetTime(), _coins);
 	}
 }

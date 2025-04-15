@@ -2,22 +2,22 @@
 
 [ext_resource type="PackedScene" uid="uid://dl2ed4gkybggf" path="res://objects/player.tscn" id="2_onms2"]
 [ext_resource type="PackedScene" uid="uid://cnymdajj1vsqm" path="res://objects/platform.tscn" id="6_sdmev"]
-[ext_resource type="PackedScene" uid="uid://bj3xsp2pt8bgu" path="res://scenes/reflective_glass.tscn" id="7_8urhj"]
+[ext_resource type="PackedScene" uid="uid://bj3xsp2pt8bgu" path="res://scenes/obstacles/reflective_glass.tscn" id="7_8urhj"]
 [ext_resource type="PackedScene" uid="uid://rjh4ifidqrfp" path="res://objects/platform_medium.tscn" id="7_ixpj3"]
 [ext_resource type="PackedScene" uid="uid://uqr4hswv6d2g" path="res://objects/platform_grass_large_round.tscn" id="8_4oh1e"]
+[ext_resource type="PackedScene" uid="uid://bopw1pwuj7cbb" path="res://scenes/obstacles/spike_floor.tscn" id="8_rv373"]
 [ext_resource type="PackedScene" uid="uid://c8up71en5djgm" path="res://objects/platform_falling.tscn" id="9_2fnpo"]
+[ext_resource type="PackedScene" uid="uid://8vakd6312emy" path="res://scenes/obstacles/spike_wall.tscn" id="9_3tvs6"]
+[ext_resource type="PackedScene" uid="uid://bfrrise2f4t30" path="res://scenes/obstacles/lava.tscn" id="10_5daeh"]
 [ext_resource type="PackedScene" uid="uid://dfpisimsgf5ce" path="res://objects/coin.tscn" id="10_fwhys"]
+[ext_resource type="PackedScene" uid="uid://blw6u6dq040mw" path="res://scenes/obstacles/big_spike.tscn" id="11_0po40"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="11_apvpm"]
-[ext_resource type="PackedScene" uid="uid://pucigfad0tll" path="res://objects/Neat Hango-Lappi.glb" id="11_k8bqn"]
 [ext_resource type="PackedScene" uid="uid://dy017k58p20sk" path="res://objects/cloud.tscn" id="13_drtpy"]
 [ext_resource type="Texture2D" uid="uid://cd7oyc56ehkx1" path="res://sprites/coin.png" id="13_jfda3"]
 [ext_resource type="Script" path="res://scripts/Panel.cs" id="14_3eddf"]
 [ext_resource type="FontFile" uid="uid://j1s8knqa1441" path="res://fonts/Summer Concert.otf" id="15_kb6nn"]
-[ext_resource type="PackedScene" uid="uid://c5ni7o4gc28gv" path="res://objects/Smashing Crift-Uusam.glb" id="16_6pava"]
 [ext_resource type="Script" path="res://database/DatabaseConnector.cs" id="16_nab4b"]
 [ext_resource type="FontFile" uid="uid://d0cxd77jybrcn" path="res://fonts/lilita_one_regular.ttf" id="17_tk810"]
-[ext_resource type="PackedScene" uid="uid://x7f0a6ivyopd" path="res://objects/Copy of Smashing Crift-Uusam.glb" id="17_tuudw"]
-[ext_resource type="PackedScene" uid="uid://bgmnykaqqio22" path="res://objects/Frantic Kasi.glb" id="18_eb3ph"]
 [ext_resource type="PackedScene" uid="uid://dkgmti3yrulmd" path="res://scenes/flag.tscn" id="19_76j1m"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_jjfum"]
@@ -486,6 +486,24 @@ transform = Transform3D(0.0465333, 0, 0.0182934, 0, 0.05, 0, -0.0182934, 0, 0.04
 [node name="ReflectiveGlass2" parent="World/Obstacles" instance=ExtResource("7_8urhj")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -1.68625, 9.35747, -33.6332)
 
+[node name="SpikeFloor" parent="World/Obstacles" instance=ExtResource("8_rv373")]
+transform = Transform3D(0.0397523, -0.00444488, -1.94292e-10, 0, -1.74846e-09, 0.04, -0.00444488, -0.0397523, -1.73763e-09, -4.49367, 6.26837, -12.5728)
+
+[node name="SpikeWall" parent="World/Obstacles" instance=ExtResource("9_3tvs6")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -5.82107, 6.88847, -17.1712)
+
+[node name="Lava" parent="World/Obstacles" instance=ExtResource("10_5daeh")]
+transform = Transform3D(0.07, 0, 0, 0, 0.07, 0, 0, 0, 0.07, -22.2287, 6.29604, -3.82972)
+
+[node name="Lava2" parent="World/Obstacles" instance=ExtResource("10_5daeh")]
+transform = Transform3D(0.06, 0, 0, 0, 0.06, 0, 0, 0, 0.06, -19.9349, 6.29604, -2.29326)
+
+[node name="BigSpike" parent="World/Obstacles" instance=ExtResource("11_0po40")]
+transform = Transform3D(0.0206139, 0, -0.0455529, 0, 0.05, 0, 0.0455529, 0, 0.0206139, -25.0061, 11.6811, -31.595)
+
+[node name="BigSpike2" parent="World/Obstacles" instance=ExtResource("11_0po40")]
+transform = Transform3D(0.0357676, 0, 0.0349382, 0, 0.05, 0, -0.0349382, 0, 0.0357676, -24.5435, 11.6811, -37.7609)
+
 [node name="Enviorment" type="Node" parent="World"]
 
 [node name="cube8" parent="World/Enviorment" instance=ExtResource("13_drtpy")]
@@ -575,9 +593,6 @@ transform = Transform3D(-0.64504, -0.996482, -0.747872, -0.929853, 0.945557, -0.
 [node name="cube36" parent="World/Enviorment" instance=ExtResource("13_drtpy")]
 transform = Transform3D(-0.185421, 0.694488, 2.6017, 1.97375, 1.80907, -0.342241, -1.8318, 1.87896, -0.632109, -36.7376, 14.0363, -48.2245)
 
-[node name="Tinkercad GLTF Scene2" parent="World" instance=ExtResource("11_k8bqn")]
-transform = Transform3D(0.0327634, 0, 0.0377698, 0, 0.05, 0, -0.0377698, 0, 0.0327634, -22.8719, 11.7991, -38.226)
-
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.422618, -0.694272, 0.582564, 0, 0.642788, 0.766044, -0.906308, 0.323744, -0.271654, 0, 3.40857, 0)
 shadow_enabled = true
@@ -646,24 +661,6 @@ horizontal_alignment = 2
 
 [node name="Database" type="Node3D" parent="."]
 script = ExtResource("16_nab4b")
-
-[node name="Tinkercad GLTF Scene" parent="." instance=ExtResource("16_6pava")]
-transform = Transform3D(0.0398271, -0.00371498, -1.62387e-10, 0, -1.74846e-09, 0.04, -0.00371498, -0.0398271, -1.7409e-09, -4.54822, 6.29117, -12.6056)
-
-[node name="Tinkercad GLTF Scene2" parent="." instance=ExtResource("17_tuudw")]
-transform = Transform3D(0.04, 0, 0, 0, 0.04, 0, 0, 0, 0.04, -5.6773, 6.88197, -17.133)
-
-[node name="Tinkercad GLTF Scene7" parent="." instance=ExtResource("18_eb3ph")]
-transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08, -22.0056, 6.01314, -3.25287)
-
-[node name="Tinkercad GLTF Scene8" parent="." instance=ExtResource("18_eb3ph")]
-transform = Transform3D(0.06, 0, 0, 0, 0.06, 0, 0, 0, 0.06, -19.9847, 6.17721, -1.93988)
-
-[node name="Tinkercad GLTF Scene9" parent="." instance=ExtResource("11_k8bqn")]
-transform = Transform3D(-0.0117367, 0, 0.048603, 0, 0.05, 0, -0.048603, 0, -0.0117367, -24.9231, 11.6866, -32.9184)
-
-[node name="Tinkercad GLTF Scene2" parent="Tinkercad GLTF Scene9" instance=ExtResource("11_k8bqn")]
-transform = Transform3D(0.0327634, 0, 0.0377698, 0, 0.05, 0, -0.0377698, 0, 0.0327634, -22.9115, 11.5212, -37.7366)
 
 [node name="flag" parent="." instance=ExtResource("19_76j1m")]
 transform = Transform3D(-0.992797, 0, -1.73619, 0, 2, 0, 1.73619, 0, -0.992797, -25.7646, 38.1222, 35.755)

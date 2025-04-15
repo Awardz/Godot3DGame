@@ -5,7 +5,7 @@ using MySqlConnector;
 
 public partial class DatabaseConnector : Node
 {
-	private string connection = "Server=localhost;Database=godot3dgame;User ID=root;Password=password;";
+	private string connection = "Server=localhost;Database=godot3dgame;User ID=root;Password=;";
 	public void ConnectToDatabase(string timeTaken, int coins)
 	{
 		string query = "INSERT INTO stats (time_taken, coins_collected) VALUES (@time_taken, @coins_collected);";
