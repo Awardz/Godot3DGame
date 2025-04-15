@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bopw1pwuj7cbb"]
+[gd_scene load_steps=5 format=3 uid="uid://bopw1pwuj7cbb"]
 
 [ext_resource type="PackedScene" uid="uid://c5ni7o4gc28gv" path="res://objects/Smashing Crift-Uusam.glb" id="1_23l14"]
+[ext_resource type="Script" path="res://scripts/obstacle.gd" id="2_ge41s"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j28qt"]
 albedo_color = Color(0.916532, 0.752581, 0.615583, 1)
@@ -14,6 +15,8 @@ size = Vector3(2.90726, 3.12889, 0.76123)
 
 [node name="SpikeFloor" instance=ExtResource("1_23l14")]
 transform = Transform3D(0.05, 0, 0, 0, -2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0, 0)
+script = ExtResource("2_ge41s")
+can_hurt_player = true
 
 [node name="Mesh_Mesh_head_geo_001_lambert2SG_001" parent="Node" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_j28qt")
@@ -23,3 +26,5 @@ surface_material_override/0 = SubResource("StandardMaterial3D_j28qt")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" index="0"]
 transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 5.383, 31.3183, 2.3877)
 shape = SubResource("BoxShape3D_r6a8f")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

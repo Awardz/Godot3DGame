@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dkgmti3yrulmd"]
 
 [ext_resource type="PackedScene" uid="uid://dtjvjdjl8cs6e" path="res://models/flag.glb" id="1_mq652"]
-[ext_resource type="Script" path="res://scenes/flag.gd" id="2_wyg1f"]
+[ext_resource type="Script" path="res://scripts/flag.gd" id="2_wyg1f"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bhlvk"]
 radius = 0.470646
