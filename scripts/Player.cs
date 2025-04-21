@@ -8,6 +8,12 @@ public partial class Player: CharacterBody3D
 
 	public delegate void OnTimeoutEventHandler();
 
+	// Signal for taking damage
+	[Signal]
+	public delegate void OnTakeDamageEventHandler(int hp);
+	[Export(PropertyHint.Range, "1, 5")]
+	public int health = 3;
+
 
 	[Export]
 	float speed = 20f;
@@ -34,7 +40,6 @@ public partial class Player: CharacterBody3D
 	public int numJumps = 0;
 
 	private Vector3 _targetVelocity = Vector3.Zero;
-
 
 	[Export(PropertyHint.Range, "0.1, 1.0")]
 	float mouseSensitivity = 0.1f;
@@ -87,7 +92,7 @@ public partial class Player: CharacterBody3D
 		_soundFootsteps = GetNode<AudioStreamPlayer>("SoundFootsteps");
 		_model = GetNode<Node3D>("Character");
 		_animation = GetNode<AnimationPlayer>("Character/AnimationPlayer");
-		_pause = GetNode<Control>("Pause");
+		_pause = GetNode<Control>("PlayerUI/Pause");
 
 
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -153,7 +158,7 @@ public partial class Player: CharacterBody3D
 		// Respawn after falling off map
 		if (Position.Y < -10)
 		{
-			GetTree().ReloadCurrentScene();
+			GameOver();
 		}
 		
 			   
@@ -325,5 +330,22 @@ public partial class Player: CharacterBody3D
 	public void OnTimeout()
 	{
 		GD.Print("cd");
+	}
+
+	private void GameOver()
+	{
+		GetTree().ReloadCurrentScene();
+	}
+
+	private void TakeDamage(int damage)
+	{
+		health -= damage;
+		EmitSignal(SignalName.OnTakeDamage, health);
+
+		if (health <= 0)
+		{
+			GameOver();
+		}
+
 	}
 }
