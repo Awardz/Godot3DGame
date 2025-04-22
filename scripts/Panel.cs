@@ -53,6 +53,12 @@ public partial class Panel : Node
 		_coins = coins;
 	}
 
+	private void OnFlagCollected()
+	{
+		Stop();
+		_databaseConnector.ConnectToDatabase(GetTime(), _coins);
+	}
+
 	private void OnFlag2Collected()
 	{
 		Stop();
