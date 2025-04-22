@@ -22,10 +22,14 @@ func _on_button_3_pressed():
 	get_tree().quit()
 
 func _on_button_4_pressed():
-	get_tree().change_scene_to_packed(register)
+	var register_panel = register.instantiate()
+	add_child(register_panel)
+	register_panel.popup_centered()
 
 func _on_button_5_pressed():
-	get_tree().change_scene_to_packed(login)
+	var login_panel = login.instantiate()
+	add_child(login_panel)
+	login_panel.popup_centered()
 
 
 func _physics_process(delta):
