@@ -13,6 +13,16 @@ public partial class ReturnButton : Button
 	private void OnReturnPressed()
 	{
 		GD.Print("Return button pressed!");
-		GetTree().ChangeSceneToPacked(mainMenu);
+		PopupPanel popup = GetParent()?.GetParent()?.GetParent() as PopupPanel;
+		if(popup != null)
+		{
+			popup.Hide();
+	
+		}
+		else
+		{
+			GD.PrintErr("Return button's parent is not a PopupPanel or Control.");
+			GetTree().ChangeSceneToPacked(mainMenu);
+		}
 	}
 }

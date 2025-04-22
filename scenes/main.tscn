@@ -67,7 +67,6 @@ environment = SubResource("Environment_525fm")
 
 [node name="Player" parent="." instance=ExtResource("2_onms2")]
 transform = Transform3D(-0.400749, -0.0150944, 0.916064, 0, 0.999864, 0.0164752, -0.916188, 0.0066024, -0.400694, 12.2063, 2.9647, 1.61821)
-health = 5
 airAcceleration = 15.0
 burstSpeed = 250.0
 
