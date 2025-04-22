@@ -8,6 +8,12 @@ public partial class Player: CharacterBody3D
 
 	public delegate void OnTimeoutEventHandler();
 
+	// Signal for taking damage
+	[Signal]
+	public delegate void OnTakeDamageEventHandler(int hp);
+	[Export(PropertyHint.Range, "1, 5")]
+	public int health = 3;
+
 
 	[Export]
 	float speed = 20f;
@@ -27,12 +33,13 @@ public partial class Player: CharacterBody3D
 	float rotationSpeed = 10f;
 	[Export]
 	float burstSpeed = 10f;
+	[Export]
+	float bulletSize = 0.5f;
 
 	public int coins = 0;
 	public int numJumps = 0;
 
 	private Vector3 _targetVelocity = Vector3.Zero;
-
 
 	[Export(PropertyHint.Range, "0.1, 1.0")]
 	float mouseSensitivity = 0.1f;
@@ -47,6 +54,7 @@ public partial class Player: CharacterBody3D
 	private float yVelocity;
 	private float rotationDirection;
 	private bool gunActive;
+	private bool doubleJump = true;
 	private Vector3 lastDirection = Vector3.Forward;
 	
 
@@ -84,7 +92,7 @@ public partial class Player: CharacterBody3D
 		_soundFootsteps = GetNode<AudioStreamPlayer>("SoundFootsteps");
 		_model = GetNode<Node3D>("Character");
 		_animation = GetNode<AnimationPlayer>("Character/AnimationPlayer");
-		_pause = GetNode<Control>("Pause");
+		_pause = GetNode<Control>("PlayerUI/Pause");
 
 
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -146,10 +154,11 @@ public partial class Player: CharacterBody3D
 		HandleControls(delta);
 		HandleEffects(delta);
 
+
 		// Respawn after falling off map
 		if (Position.Y < -10)
 		{
-			GetTree().ReloadCurrentScene();
+			GameOver();
 		}
 		
 			   
@@ -193,30 +202,24 @@ public partial class Player: CharacterBody3D
 		}
 		Vector3 bSpeed = Vector3.Zero;
 		// Handle player weapon
-		if (Input.IsActionJustPressed("shoot_burst")) 
+		if (Input.IsActionJustPressed("shoot"))
 		{
 			var bullet = _bulletScene.Instantiate<RigidBody3D>();
 			GetTree().Root.AddChild(bullet);
-
-			// Get rotation of player and use it to set the burst speed of the player
-			bSpeed = -_player.GlobalTransform.Basis.Z * burstSpeed; // Move backward relative to player direction
 
 			// Set position of bullet
 			bullet.Transform = _bulletSpawnPoint.GlobalTransform;
 			// Apply impulse
 			bullet.ApplyImpulse(_bulletSpawnPoint.GlobalTransform.Basis.Z * shootPower);
 
+			await ToSignal(GetTree().CreateTimer(5), "timeout");
+			bullet.QueueFree(); // Destroy bullet
 
-			if (Input.MouseMode != Input.MouseModeEnum.Captured)
-			{
-				Input.MouseMode = Input.MouseModeEnum.Captured;
-			}
+		}
 
-
-			// 5 second dynamic yield
-		   /* await ToSignal(GetTree().CreateTimer(5), "timeout");
-			bullet.QueueFree(); // Destroy bullet */
-
+		if (Input.IsActionJustPressed("dash"))
+		{
+			bSpeed = BurstMovement();
 			
 		}
 
@@ -224,17 +227,23 @@ public partial class Player: CharacterBody3D
 		if (IsOnFloor())
 		{
 			yVelocity = -0.01f;
+			doubleJump = true;
 		}
 		else
 		{
 			yVelocity = Mathf.Clamp(yVelocity - gravity, -maxTerminalVelocity, maxTerminalVelocity);
 		}
 
-		if (Input.IsActionJustPressed("jump") && IsOnFloor())
+		if (Input.IsActionJustPressed("jump") && (IsOnFloor() || doubleJump))
 		{
 			numJumps++;
 			_soundJump.Play();
 			yVelocity = jumpPower;
+
+			if (!IsOnFloor())
+			{
+				doubleJump = false;
+			}
 		}
 
 		float accel = IsOnFloor() ? acceleration : airAcceleration; // applies acceleration on ground, air acceleration in air
@@ -292,6 +301,18 @@ public partial class Player: CharacterBody3D
 		
 	}
 
+	private Vector3 BurstMovement()
+	{
+		Vector3 bSpeed = Vector3.Zero;
+		// Move player backwards
+		while  (bSpeed.Length() < maxTerminalVelocity)
+		{
+			bSpeed = _player.GlobalTransform.Basis.Z * burstSpeed;
+		}
+
+		return bSpeed;
+	}
+
 	private void StartGunCooldown()
 	{
 		gunActive = false;
@@ -309,5 +330,22 @@ public partial class Player: CharacterBody3D
 	public void OnTimeout()
 	{
 		GD.Print("cd");
+	}
+
+	private void GameOver()
+	{
+		GetTree().ReloadCurrentScene();
+	}
+
+	private void TakeDamage(int damage)
+	{
+		health -= damage;
+		EmitSignal(SignalName.OnTakeDamage, health);
+
+		if (health <= 0)
+		{
+			GameOver();
+		}
+
 	}
 }
