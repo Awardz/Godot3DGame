@@ -1,7 +1,8 @@
 extends RayCast3D
 
-@onready var beam_mesh = $BeamMesh
-@onready var end_particles = $EndParticles
+var is_active = true
+@onready var beam_mesh = $BeamMesh3D
+@onready var end_particles = $BeamMesh3D/EndParticles
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -19,4 +20,10 @@ func _process(delta: float) -> void:
 		beam_mesh.mesh.height = cast_point.y
 		beam_mesh.position.y = cast_point.y/2
 		
-		end_particles.position.y = cast_point.y
+		end_particles.position.y = -cast_point.y
+
+
+func _on_area_3d_body_entered(body: Node3D) -> void:
+	if body.is_in_group("Player"):
+		if(is_active):
+			body.TakeDamage(1);

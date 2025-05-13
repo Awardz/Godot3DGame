@@ -22,7 +22,8 @@ public partial class DatabaseConnector : Node
 
 				using (MySqlCommand command = new MySqlCommand(query, connection))
 				{
-					command.Parameters.AddWithValue("@user_id", userId);
+					//command.Parameters.AddWithValue("@user_id", userId);
+					command.Parameters.AddWithValue("@user_id", userId == 0 ? null : userId);
 					command.Parameters.AddWithValue("@level_id", levelId);
 					command.Parameters.AddWithValue("@time_taken", timeTaken);
 					command.Parameters.AddWithValue("@coins_collected", coins);

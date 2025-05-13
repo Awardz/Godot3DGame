@@ -12,7 +12,7 @@ public partial class UserAuthentication : Node
     {
         
         string hash  = BCrypt.Net.BCrypt.HashPassword(password);
-        string query = "INSERT INTO users (username, password, is_admin) VALUES (@username, @password FALSE);";
+        string query = "INSERT INTO users (username, password, is_admin) VALUES (@username, @password, FALSE);";
 
         using (var connection = new MySqlConnection(this.connection))
         {
